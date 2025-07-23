@@ -1,9 +1,10 @@
 const Footer =()=>{
 
     return(
-        <footer>
-           <p>Todos  los derechos reservados </p>
-        </footer>
+            <footer className="bg-dark text-light text-center py-3 mt-auto">
+            <p className="mb-0">Todos los derechos reservados © {new Date().getFullYear()}</p>
+            </footer>
+
 
     )
 }

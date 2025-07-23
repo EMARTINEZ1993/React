@@ -16,7 +16,8 @@ const History = () => {
   return (
     <div className="history-container">
       <h3>Historial de Préstamos</h3>
-      <table>
+      <table className="table table-striped table-bordered">
+
         <thead>
           <tr>
             <th>Fecha</th>

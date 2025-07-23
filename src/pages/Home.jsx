@@ -14,12 +14,13 @@ function Home() {
         Este sistema te permite gestionar los elementos tecnológicos y pedagógicos que se encuentran dentro de la institución.
         Aquí podrás registrar préstamos, devoluciones y llevar un control claro de los recursos disponibles.
       </p>
+      
 
       <div className="card-container">
         <div className="home-card">
           <h3>📦 Registrar Elementos</h3>
           <p>Agrega nuevos elementos al inventario como computadores, proyectores, cables, etc.</p>
-          <Link to="/inventario" className="home-button">Ir al Inventario</Link>
+          <Link to="/inventory" className="home-button">Ir al Inventario</Link>
         </div>
 
         <div className="home-card">

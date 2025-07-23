@@ -19,8 +19,6 @@ const Layout = () => {
       <Header />
         <NavBar />
 
-        
-
       <main>
         <Outlet />
       </main>

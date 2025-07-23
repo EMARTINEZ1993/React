@@ -15,11 +15,12 @@ import Restablecer_password  from './pages/Restablecer_Password'
 import UserManagement from './pages/UserManagement'
 import Profile from './pages/Profile'
 import { initData } from './utils/initialData'
-initData()
+import History from './pages/History'
 
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+  initData()
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -37,6 +38,7 @@ function App() {
 
         <Route element={<ProtectedRoute allowedRoles={['coordinador']} />}>
           <Route path="users" element={<UserManagement />} />
+          <Route path="History" element={<History />} />
         </Route>
 
      

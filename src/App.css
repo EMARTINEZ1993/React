@@ -48,33 +48,15 @@ header {
   z-index: 100;
 }
 
-nav {
+
+
+.layout {
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
-    background-color: var(--primary-color);
+  flex-direction: column;
+  min-height: 100vh;
 }
-
-nav a, nav button {
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
-  transition: var(--transition);
-  font-weight: 500;
-
-  border: none;
-  cursor: pointer;
-  font-size: 0.95rem;
-}
-
-nav a:hover {
-  border: none;
- border-bottom: 1px solid #fff;
 
  
-}
-
 main {
   flex: 1;
   padding: 2rem;
