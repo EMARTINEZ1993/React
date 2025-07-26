@@ -1170,3 +1170,9 @@ body {
 ```
 
 Esta guía de estilos CSS proporciona una base sólida y profesional para el sistema de inventario escolar, con un diseño moderno, responsive y accesible.
+
+## 👩‍💻 Autora
+
+**Luz Eliana Martinez Ramos**
+
+Guía de estilos CSS desarrollada para el sistema de gestión de inventario escolar.

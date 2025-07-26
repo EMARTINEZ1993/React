@@ -1,8 +1,11 @@
 {
   "name": "vite-inventario",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Sistema de gestión de inventario escolar desarrollado con React y Vite",
+  "author": "Luz Eliana Martinez Ramos",
+  "keywords": ["react", "vite", "inventario", "escolar", "gestión", "préstamos"],
   "scripts": {
     "dev": "vite",
     "build": "vite build",

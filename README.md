@@ -316,9 +316,11 @@ npm run build
 
 Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 
-## 👨‍💻 Autor
+## 👩‍💻 Autora
 
-Desarrollado para gestión de inventario escolar.
+**Luz Eliana Martinez Ramos**
+
+Desarrollado para gestión de inventario escolar con tecnologías modernas de React.
 
 ---
 

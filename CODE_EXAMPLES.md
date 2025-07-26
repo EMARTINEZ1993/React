@@ -930,3 +930,9 @@ export const importData = (file) => {
 ```
 
 Estos ejemplos de código proporcionan una base sólida para implementar todas las funcionalidades del sistema de inventario escolar. Cada componente está diseñado para ser reutilizable y fácil de mantener.
+
+## 👩‍💻 Autora
+
+**Luz Eliana Martinez Ramos**
+
+Ejemplos de código desarrollados para el sistema de gestión de inventario escolar.

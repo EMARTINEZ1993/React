@@ -402,3 +402,9 @@ const getSystemStats = () => {
 ---
 
 Esta guía técnica complementa el README principal y proporciona la información necesaria para desarrolladores que trabajen en el proyecto.
+
+## 👩‍💻 Autora
+
+**Luz Eliana Martinez Ramos**
+
+Guía técnica desarrollada para el sistema de gestión de inventario escolar.

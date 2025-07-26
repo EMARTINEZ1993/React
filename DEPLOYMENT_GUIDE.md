@@ -616,3 +616,9 @@ self.addEventListener('fetch', (event) => {
 ```
 
 Esta guía proporciona todo lo necesario para deployar y mantener el sistema de inventario escolar en producción de manera profesional y segura.
+
+## 👩‍💻 Autora
+
+**Luz Eliana Martinez Ramos**
+
+Guía de despliegue desarrollada para el sistema de gestión de inventario escolar.
