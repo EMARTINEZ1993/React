@@ -5,10 +5,6 @@ import App from './App'
 import './index.css'
 import { AuthProvider } from './context/AuthContext'
 
-import { initData } from './utils/initialData'
-initData()
-
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>

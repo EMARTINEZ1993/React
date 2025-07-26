@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
+import '../styles/Auth.css'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -16,7 +17,7 @@ const Login = () => {
       return
     }
     if (login(email, password)) {
-      navigate('/inventory')
+      navigate('/')
     } else {
       setError('Credenciales incorrectas')
     }
@@ -24,40 +25,49 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <h2>Iniciar sesión</h2>
-      <form onSubmit={handleSubmit} className="login-form">
-        <div className="form-group">
-          <label htmlFor="email">Correo electrónico:</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="username"
-            required
-          />
+      <div className="auth-card">
+        <div className="auth-header">
+          <h1>Iniciar Sesión</h1>
+          <p>Ingrese sus credenciales para acceder al sistema</p>
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Contraseña:</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            required
-          />
+        
+        {error && <div className="error-message">{error}</div>}
+        
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label htmlFor="email">Correo Electrónico</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="ejemplo@correo.com"
+              autoComplete="username"
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="password">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Ingrese su contraseña"
+              autoComplete="current-password"
+              required
+            />
+          </div>
+          
+          <button type="submit" className="auth-button">Iniciar Sesión</button>
+        </form>
+        
+        <div className="auth-links">
+          <Link to="/register" className="auth-link">Registrarse</Link>
+          <Link to="/restablecer-password" className="auth-link">¿Olvidó su contraseña?</Link>
         </div>
-        {error && <p className="error">{error}</p>}
-        <button type="submit" className="btn-login">Ingresar</button>
-        <p id='Regis'>¿No tienes una cuenta? <a href="/Register">Regístrate</a></p>
-        {error === 'Credenciales incorrectas' && (
-          <p className="forgot-password">
-            ¿Olvidaste tu contraseña? <a href="/restablecer_password">Restablécela aquí</a>
-          </p>
-
-        )}
-      </form>
+      </div>
     </div>
   )
 }

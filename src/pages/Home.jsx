@@ -1,41 +1,76 @@
-// src/pages/Home.jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Home.css'; // Importar el CSS externo
-
-
+import React, { useContext, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import ActionButton from '../components/ActionButton';
+import './Home.css';
 
 function Home() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    availableItems: 0,
+    activeLoans: 0,
+    pendingRequests: 0,
+    totalUsers: 0
+  });
+
+  useEffect(() => {
+    // Cargar estadísticas dinámicas desde localStorage
+    const loadStats = () => {
+      const inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+      const loans = JSON.parse(localStorage.getItem('loans')) || [];
+      const loanRequests = JSON.parse(localStorage.getItem('loanRequests')) || [];
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+
+      setStats({
+        availableItems: inventory.filter(item => item.status === 'disponible').length,
+        activeLoans: loans.filter(loan => loan.status === 'activo').length,
+        pendingRequests: loanRequests.filter(request => request.status === 'pendiente').length,
+        totalUsers: users.length
+      });
+    };
+
+    loadStats();
+  }, []);
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+  
   return (
     <div className="home-container">
-      <h1 className="home-title">Bienvenida al Sistema de Inventario Escolar</h1>
-
-      <p className="home-paragraph">
-        Este sistema te permite gestionar los elementos tecnológicos y pedagógicos que se encuentran dentro de la institución.
-        Aquí podrás registrar préstamos, devoluciones y llevar un control claro de los recursos disponibles.
-      </p>
-      
-
-      <div className="card-container">
-        <div className="home-card">
-          <h3>📦 Registrar Elementos</h3>
-          <p>Agrega nuevos elementos al inventario como computadores, proyectores, cables, etc.</p>
-          <Link to="/inventory" className="home-button">Ir al Inventario</Link>
-        </div>
-
-        <div className="home-card">
-          <h3>👩‍🏫 Consultar Préstamos</h3>
-          <p>Consulta los elementos que han sido prestados a los docentes.</p>
-          <Link to="/prestamos" className="home-button">Ver Préstamos</Link>
-        </div>
-
-        <div className="home-card">
-          <h3>🔒 Acceder al Sistema</h3>
-          <p>Inicia sesión como Coordinador o Docente para realizar gestiones.</p>
-          <Link to="/login" className="home-button">Iniciar Sesión</Link>
-        </div>
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">Panel de Control</h1>
       </div>
-
+      
+      <div className="welcome-banner">
+        <h2 className="home-title">Bienvenido al Sistema de Inventario Escolar</h2>
+        <p className="home-paragraph">
+          Este sistema te permite gestionar los elementos tecnológicos y pedagógicos que se encuentran dentro de la institución.
+          Aquí podrás registrar préstamos, devoluciones y llevar un control claro de los recursos disponibles.
+        </p>
+      </div>
+      
+      {user && user.role === 'coordinador' && (
+        <div className="home-stats">
+          <div className="stat-item">
+            <div className="stat-value">{stats.availableItems}</div>
+            <div className="stat-label">Elementos Disponibles</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-value">{stats.activeLoans}</div>
+            <div className="stat-label">Préstamos Activos</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-value">{stats.pendingRequests}</div>
+            <div className="stat-label">Solicitudes Pendientes</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-value">{stats.totalUsers}</div>
+            <div className="stat-label">Usuarios Registrados</div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

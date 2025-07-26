@@ -1,0 +1,124 @@
+/* ActionButton.css - Estilos para botones de acción CRUD */
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  gap: 0.35rem;
+  border: none;
+  white-space: nowrap;
+}
+
+/* Tamaños */
+.action-btn-small {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.action-btn-medium {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.action-btn-large {
+  padding: 0.65rem 1.3rem;
+  font-size: 1rem;
+}
+
+/* Tipos */
+.action-btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+.action-btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.action-btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: 1px solid #6c757d;
+}
+
+.action-btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn-success {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.action-btn-success:hover {
+  background-color: #219653;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: 1px solid #dc3545;
+}
+
+.action-btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.action-btn-warning {
+  background-color: var(--warning-color);
+  color: white;
+}
+
+.action-btn-warning:hover {
+  background-color: #e67e22;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botones de acción en tablas */
+.action-buttons-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-buttons-container .action-btn {
+  margin: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .action-buttons-container {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  
+  .action-btn-small {
+    padding: 0.4rem 0.8rem;
+  }
+}

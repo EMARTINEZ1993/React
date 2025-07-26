@@ -1,159 +1,227 @@
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import Modal from '../components/Modal';
+import ActionButton from '../components/ActionButton';
 
 const Profile = () => {
   const { user, logout } = useContext(AuthContext);
 
   const [form, setForm] = useState({ nombre: "", email: "" });
-  const [passwordForm, setPasswordForm] = useState({ current: "", new: "", confirm: "" });
-  const [message, setMessage] = useState("");
-  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [message, setMessage] = useState(null);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   useEffect(() => {
     if (user) {
       setForm({
-        nombre: user.name || "",
+        nombre: user.nombre || user.name || "",
         email: user.email || "",
       });
     }
   }, [user]);
 
   const handleFormChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+  
+  // Alias para mantener compatibilidad con el nuevo diseño
+  const handleChange = handleFormChange;
+
+  // La función handlePasswordChange se define más abajo
+
+  const handleProfileSubmit = (e) => {
+    if (e) e.preventDefault();
+
+    const updatedUser = { ...user, nombre: form.nombre };
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const updatedUsers = users.map((u) =>
+      u.email === user.email ? updatedUser : u
+    );
+
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+    setMessage({ text: "Perfil actualizado correctamente", type: "success" });
   };
 
   const handlePasswordChange = (e) => {
-    setPasswordForm({ ...passwordForm, [e.target.name]: e.target.value });
-  };
+    const { name, value } = e.target
+    setPasswordData({
+      ...passwordData,
+      [name]: value
+    })
+  }
 
-  const handleProfileSubmit = (e) => {
-    e.preventDefault();
-    const updatedUser = { ...user, name: form.nombre };
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const updatedUsers = users.map((u) =>
-      u.email === user.email ? updatedUser : u
-    );
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-    setMessage("✅ Perfil actualizado correctamente");
-  };
-
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault();
-
-    if (passwordForm.current !== user.password) {
-      return setMessage("❌ La contraseña actual no es correcta");
+  const handlePasswordSubmit = () => {
+    // Validar que las contraseñas coincidan
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      setMessage({ text: 'Las contraseñas no coinciden', type: 'error' })
+      return
     }
-
-    if (passwordForm.new !== passwordForm.confirm) {
-      return setMessage("❌ Las nuevas contraseñas no coinciden");
+    
+    // Validar longitud mínima
+    if (passwordData.newPassword.length < 8) {
+      setMessage({ text: 'La contraseña debe tener al menos 8 caracteres', type: 'error' })
+      return
     }
-
-    const updatedUser = { ...user, password: passwordForm.new };
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const updatedUsers = users.map((u) =>
-      u.email === user.email ? updatedUser : u
-    );
-
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-    setMessage("✅ Contraseña actualizada. Por seguridad, vuelve a iniciar sesión.");
-
-    // Cierre de sesión tras 2 segundos
+    
+    // Validar contraseña actual
+    if (passwordData.currentPassword !== user.password) {
+      setMessage({ text: 'La contraseña actual es incorrecta', type: 'error' })
+      return
+    }
+    
+    // Actualizar contraseña en localStorage
+    const users = JSON.parse(localStorage.getItem('users')) || []
+    const updatedUsers = users.map(u => {
+      if (u.email === user.email) {
+        return { ...u, password: passwordData.newPassword }
+      }
+      return u
+    })
+    
+    localStorage.setItem('users', JSON.stringify(updatedUsers))
+    localStorage.setItem('user', JSON.stringify({ ...user, password: passwordData.newPassword }))
+    
+    // Mostrar mensaje de éxito
+    setMessage({ text: 'Contraseña actualizada con éxito. Cerrando sesión...', type: 'success' })
+    
+    // Limpiar formulario
+    setPasswordData({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    })
+    
+    // Cerrar modal
+    setShowPasswordModal(false)
+    
+    // Cerrar sesión después de un tiempo
     setTimeout(() => {
-      logout();
-    }, 2000);
+      logout()
+    }, 3000)
   };
 
   return (
-<div className="inventory-container">
-          <h2>Perfil de Usuario</h2>
-
-      <form onSubmit={handleProfileSubmit} style={{ marginBottom: "2rem" }}>
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Nombre:</label>
-          <input
-            type="text"
-            name="nombre"
-            value={form.nombre}
-            onChange={handleFormChange}
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            disabled
-            style={{ width: "100%", padding: "0.5rem", backgroundColor: "#eee" }}
-          />
-        </div>
-        <button type="submit" style={{ padding: "0.5rem 1rem" }}>
-          Actualizar Perfil
-        </button>
-      </form>
-
-      <div>
-        <button
-          onClick={() => setShowPasswordForm(!showPasswordForm)}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#007BFF",
-            cursor: "pointer",
-            marginBottom: "1rem",
-            textDecoration: "underline"
-          }}
-        >
-          {showPasswordForm ? "Ocultar cambio de contraseña" : "Cambiar contraseña"}
-        </button>
-
-        {showPasswordForm && (
-          <form onSubmit={handlePasswordSubmit} style={{ borderTop: "1px solid #ccc", paddingTop: "1rem" }}>
-            <div style={{ marginBottom: "1rem" }}>
-              <label>Contraseña actual:</label>
-              <input
-                type="password"
-                name="current"
-                value={passwordForm.current}
-                onChange={handlePasswordChange}
-                style={{ width: "100%", padding: "0.5rem" }}
-              />
-            </div>
-            <div style={{ marginBottom: "1rem" }}>
-              <label>Nueva contraseña:</label>
-              <input
-                type="password"
-                name="new"
-                value={passwordForm.new}
-                onChange={handlePasswordChange}
-                style={{ width: "100%", padding: "0.5rem" }}
-              />
-            </div>
-            <div style={{ marginBottom: "1rem" }}>
-              <label>Confirmar nueva contraseña:</label>
-              <input
-                type="password"
-                name="confirm"
-                value={passwordForm.confirm}
-                onChange={handlePasswordChange}
-                style={{ width: "100%", padding: "0.5rem" }}
-              />
-            </div>
-            <button type="submit" style={{ padding: "0.5rem 1rem" }}>
-              Cambiar Contraseña
-            </button>
-          </form>
-        )}
-      </div>
-
+    <div className="container mt-4">
+      <h2 className="page-title">Perfil de Usuario</h2>
+      
       {message && (
-        <div style={{ marginTop: "1rem", color: message.includes("✅") ? "green" : "red" }}>
-          {message}
+        <div className={typeof message === 'object' ? message.type : (message.includes("✅") ? "success" : "error")}>
+          {typeof message === 'object' ? message.text : message}
         </div>
       )}
+      
+      <div className="card mb-4">
+        <div className="card-header">
+          <h3>Información Personal</h3>
+        </div>
+        <div className="card-body">
+          <form onSubmit={handleProfileSubmit}>
+            <div className="form-group mb-3">
+              <label htmlFor="nombre" className="form-label">Nombre</label>
+              <input
+                type="text"
+                className="form-control"
+                id="nombre"
+                name="nombre"
+                value={form.nombre}
+                onChange={handleFormChange}
+                placeholder="Tu nombre"
+                required
+              />
+            </div>
+            <div className="form-group mb-3">
+              <label htmlFor="email" className="form-label">Email</label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                name="email"
+                value={form.email}
+                disabled
+                placeholder="tu.email@ejemplo.com"
+              />
+            </div>
+            <ActionButton type="primary" onClick={handleProfileSubmit}>
+              Actualizar Información
+            </ActionButton>
+          </form>
+        </div>
+      </div>
+      
+      <div className="card">
+        <div className="card-header d-flex justify-content-between align-items-center">
+          <h3>Seguridad</h3>
+          <ActionButton 
+            type="secondary" 
+            onClick={() => setShowPasswordModal(true)}
+          >
+            Cambiar Contraseña
+          </ActionButton>
+        </div>
+      </div>
+
+      {/* Modal para cambiar contraseña */}
+      <Modal
+        isOpen={showPasswordModal}
+        onClose={() => setShowPasswordModal(false)}
+        title="Cambiar Contraseña"
+        footer={
+          <>
+            <ActionButton type="secondary" onClick={() => setShowPasswordModal(false)}>
+              Cancelar
+            </ActionButton>
+            <ActionButton type="danger" onClick={handlePasswordSubmit}>
+              Cambiar Contraseña
+            </ActionButton>
+          </>
+        }
+      >
+        <div className="form-group mb-3">
+          <label htmlFor="currentPassword" className="form-label">Contraseña Actual</label>
+          <input
+            type="password"
+            className="form-control"
+            id="currentPassword"
+            name="currentPassword"
+            value={passwordData.currentPassword}
+            onChange={handlePasswordChange}
+            placeholder="Ingresa tu contraseña actual"
+            required
+          />
+        </div>
+        <div className="form-group mb-3">
+          <label htmlFor="newPassword" className="form-label">Nueva Contraseña</label>
+          <input
+            type="password"
+            className="form-control"
+            id="newPassword"
+            name="newPassword"
+            value={passwordData.newPassword}
+            onChange={handlePasswordChange}
+            placeholder="Ingresa tu nueva contraseña"
+            required
+          />
+        </div>
+        <div className="form-group mb-3">
+          <label htmlFor="confirmPassword" className="form-label">Confirmar Nueva Contraseña</label>
+          <input
+            type="password"
+            className="form-control"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={passwordData.confirmPassword}
+            onChange={handlePasswordChange}
+            placeholder="Confirma tu nueva contraseña"
+            required
+          />
+        </div>
+      </Modal>
     </div>
   );
 };

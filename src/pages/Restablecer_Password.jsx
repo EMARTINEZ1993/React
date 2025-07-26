@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import '../styles/Auth.css';
 
 function RestablecerPassword() {
     const [email, setEmail] = useState("");
@@ -84,155 +86,132 @@ function RestablecerPassword() {
     };
 
     return (
-        <div className="auth-container" style={{ maxWidth: 400, margin: "2rem auto", padding: "2rem" }}>
-            <h2 style={{ marginBottom: "1.5rem", textAlign: "center" }}>Restablecer Contraseña</h2>
-            
-            {paso === 1 && (
-                <form onSubmit={handleEnviarEmail}>
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{ display: "block", marginBottom: "0.5rem" }}>
-                            Correo electrónico:
-                        </label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            required
-                            style={{ width: "100%", padding: "0.75rem", borderRadius: "4px", border: "1px solid #ddd" }}
-                        />
-                    </div>
-                    <button 
-                        type="submit" 
-                        style={{
-                            width: "100%",
-                            padding: "0.75rem",
-                            backgroundColor: "#3498db",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            marginTop: "1rem"
-                        }}
-                    >
-                        Enviar instrucciones
-                    </button>
-                </form>
-            )}
-            
-            {paso === 2 && (
-                <form onSubmit={handleVerificarCodigo}>
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{ display: "block", marginBottom: "0.5rem" }}>
-                            Código de verificación:
-                        </label>
-                        <input
-                            type="text"
-                            value={codigo}
-                            onChange={e => setCodigo(e.target.value)}
-                            required
-                            style={{ width: "100%", padding: "0.75rem", borderRadius: "4px", border: "1px solid #ddd" }}
-                        />
-                        <small style={{ display: "block", marginTop: "0.5rem", color: "#666" }}>
-                            Ingresa el código de 6 dígitos que enviamos a {email}
-                        </small>
-                    </div>
-                    <button 
-                        type="submit" 
-                        style={{
-                            width: "100%",
-                            padding: "0.75rem",
-                            backgroundColor: "#3498db",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            marginTop: "1rem"
-                        }}
-                    >
-                        Verificar código
-                    </button>
-                </form>
-            )}
-            
-            {paso === 3 && (
-                <form onSubmit={handleCambiarPassword}>
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{ display: "block", marginBottom: "0.5rem" }}>
-                            Nueva contraseña:
-                        </label>
-                        <input
-                            type="password"
-                            value={nuevaPassword}
-                            onChange={e => setNuevaPassword(e.target.value)}
-                            required
-                            minLength="6"
-                            style={{ width: "100%", padding: "0.75rem", borderRadius: "4px", border: "1px solid #ddd" }}
-                        />
-                    </div>
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{ display: "block", marginBottom: "0.5rem" }}>
-                            Confirmar nueva contraseña:
-                        </label>
-                        <input
-                            type="password"
-                            value={confirmarPassword}
-                            onChange={e => setConfirmarPassword(e.target.value)}
-                            required
-                            minLength="6"
-                            style={{ width: "100%", padding: "0.75rem", borderRadius: "4px", border: "1px solid #ddd" }}
-                        />
-                    </div>
-                    <button 
-                        type="submit" 
-                        style={{
-                            width: "100%",
-                            padding: "0.75rem",
-                            backgroundColor: "#27ae60",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            marginTop: "1rem"
-                        }}
-                    >
-                        Cambiar contraseña
-                    </button>
-                </form>
-            )}
-            
-            {paso === 4 && (
-                <div style={{ textAlign: "center", padding: "1rem" }}>
-                    <p style={{ color: "#27ae60", marginBottom: "1rem" }}>
-                        ¡Contraseña restablecida con éxito!
-                    </p>
-                    <a 
-                        href="/login" 
-                        style={{
-                            display: "inline-block",
-                            padding: "0.75rem 1.5rem",
-                            backgroundColor: "#3498db",
-                            color: "white",
-                            textDecoration: "none",
-                            borderRadius: "4px"
-                        }}
-                    >
-                        Volver al inicio de sesión
-                    </a>
+        <div className="auth-container">
+            <div className="auth-card">
+                <div className="auth-header">
+                    <h1>Restablecer Contraseña</h1>
+                    <p>Siga los pasos para recuperar su contraseña</p>
                 </div>
-            )}
-            
-            {mensaje && (
-                <p style={{ 
-                    marginTop: "1rem", 
-                    padding: "0.75rem", 
-                    borderRadius: "4px",
-                    backgroundColor: paso === 4 ? "#e8f5e9" : "#fff3e0",
-                    color: paso === 4 ? "#27ae60" : "#333",
-                    borderLeft: `4px solid ${paso === 4 ? "#27ae60" : "#f39c12"}`
-                }}>
-                    {mensaje}
-                </p>
-            )}
+                
+                {mensaje && (
+                    <div className={mensaje.includes('incorrecto') || mensaje.includes('no coinciden') ? 'error-message' : 'success-message'}>
+                        {mensaje}
+                    </div>
+                )}
+                
+                <div className="reset-steps">
+                    <div className={`reset-step ${paso >= 1 ? 'active' : ''} ${paso > 1 ? 'completed' : ''}`}>
+                        <div className="reset-step-number">1</div>
+                        <div className="reset-step-label">Email</div>
+                    </div>
+                    <div className={`reset-step ${paso >= 2 ? 'active' : ''} ${paso > 2 ? 'completed' : ''}`}>
+                        <div className="reset-step-number">2</div>
+                        <div className="reset-step-label">Verificación</div>
+                    </div>
+                    <div className={`reset-step ${paso >= 3 ? 'active' : ''} ${paso > 3 ? 'completed' : ''}`}>
+                        <div className="reset-step-number">3</div>
+                        <div className="reset-step-label">Nueva Contraseña</div>
+                    </div>
+                    <div className={`reset-step ${paso >= 4 ? 'active' : ''}`}>
+                        <div className="reset-step-number">4</div>
+                        <div className="reset-step-label">Completado</div>
+                    </div>
+                    <div className="reset-progress-bar">
+                        <div className="reset-progress-fill" style={{ width: `${(paso - 1) * 33.33}%` }}></div>
+                    </div>
+                </div>
+                
+                {paso === 1 && (
+                    <div className="auth-form">
+                        <form onSubmit={handleEnviarEmail}>
+                            <div className="form-group">
+                                <label>Correo Electrónico</label>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                    placeholder="Ingrese su correo electrónico"
+                                    required
+                                />
+                            </div>
+                            <button 
+                                type="submit" 
+                                className="auth-button"
+                            >
+                                Enviar instrucciones
+                            </button>
+                        </form>
+                    </div>
+                )}
+                
+                {paso === 2 && (
+                    <div className="auth-form">
+                        <form onSubmit={handleVerificarCodigo}>
+                            <div className="form-group">
+                                <label>Código de Verificación</label>
+                                <input
+                                    type="text"
+                                    value={codigo}
+                                    onChange={e => setCodigo(e.target.value)}
+                                    placeholder="Ingrese el código de 6 dígitos"
+                                    required
+                                />
+                                <small>Ingresa el código de 6 dígitos que enviamos a {email}</small>
+                            </div>
+                            <button 
+                                type="submit" 
+                                className="auth-button"
+                            >
+                                Verificar código
+                            </button>
+                        </form>
+                    </div>
+                )}
+                
+                {paso === 3 && (
+                    <div className="auth-form">
+                        <form onSubmit={handleCambiarPassword}>
+                            <div className="form-group">
+                                <label>Nueva Contraseña</label>
+                                <input
+                                    type="password"
+                                    value={nuevaPassword}
+                                    onChange={e => setNuevaPassword(e.target.value)}
+                                    placeholder="Mínimo 6 caracteres"
+                                    required
+                                    minLength="6"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Confirmar Contraseña</label>
+                                <input
+                                    type="password"
+                                    value={confirmarPassword}
+                                    onChange={e => setConfirmarPassword(e.target.value)}
+                                    placeholder="Repita la nueva contraseña"
+                                    required
+                                    minLength="6"
+                                />
+                            </div>
+                            <button 
+                                type="submit" 
+                                className="auth-button"
+                            >
+                                Cambiar contraseña
+                            </button>
+                        </form>
+                    </div>
+                )}
+                
+                {paso === 4 && (
+                    <div className="success-message" style={{ marginTop: '20px', textAlign: 'center' }}>
+                        <p>¡Contraseña restablecida con éxito!</p>
+                        <Link to="/login" className="auth-button" style={{ display: 'inline-block', marginTop: '15px' }}>
+                            Volver al inicio de sesión
+                        </Link>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
